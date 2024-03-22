@@ -5,12 +5,13 @@ tree.insert(15)
 tree.insert(-1)
 tree.insert(-2)
 tree.insert(-4)
-tree.insert(8)
 
 
-tree.print();
-;
 // tree.deleteItem(4);
+tree.rebalance();
+tree.print();
 console.log(tree.isBalanced());
+console.log(tree.inOrder());
+
 // tree.print();
 // tree.inOrder((val)=>console.log(val));

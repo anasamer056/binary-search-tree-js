@@ -239,12 +239,18 @@ export default class BinarySearchTree {
     return null;    
   }
 
-
+  
   isBalanced(){
     const leftHeight = this.getHeightOf(this.root.left);
     const rightHeight = this.getHeightOf(this.root.right);
     if (Math.abs(leftHeight - rightHeight) > 1) return false;
     else return true;
+  }
+
+  rebalance(){
+    const currentArray = this.inOrder();
+    this.root = this.$buildTree(currentArray);
+    return this;
   }
 
   // Prints the tree to the console
