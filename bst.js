@@ -105,7 +105,7 @@ export default class BinarySearchTree {
         prev = curr;
         curr = curr.right;
       }
-      else return {curr, prev};
+      else return curr;
     }
     return null;    
   }
@@ -207,6 +207,13 @@ export default class BinarySearchTree {
       arr.push(curr.value);
       return arr;
     }
+  }
+  
+  // Returns height of passed node
+  getHeightOf(node){
+    if (!node) return -1;
+    
+    return Math.max(this.getHeightOf(node.right), this.getHeightOf(node.left)) + 1;
   }
 
   // Prints the tree to the console
