@@ -126,7 +126,7 @@ export default class BinarySearchTree {
         callback(curr.value);
       }
 
-      // If no callback is passed, tree elements are returned in level-order
+    // If no callback is passed, tree elements are returned in level-order
     } else {
       if (!root) return [];
       let result = [];
@@ -143,8 +143,9 @@ export default class BinarySearchTree {
     }
   } 
 
+  // Depth-first traversal (In Order)
   inOrder(callback, root = this.root){
-
+    // If a callback is passed, it's called with values one at a time
     if (callback){
       if (!root) return;
       let curr = root; 
@@ -152,6 +153,7 @@ export default class BinarySearchTree {
       callback(curr.value);
       this.inOrder(callback, curr.right);
     }
+    // If no callback is passed, tree elements are returned in order
     else {
       if (!root) return [];
       let arr = [];
@@ -161,7 +163,50 @@ export default class BinarySearchTree {
       arr = arr.concat(this.inOrder(null, curr.right));
       return arr;
     }
+  }
 
+  // Depth-first traversal (Pre Order)
+  preOrder(callback, root = this.root){
+    // If a callback is passed, it's called with values one at a time
+    if (callback){
+      if (!root) return;
+      let curr = root; 
+      callback(curr.value);
+      this.preOrder(callback, curr.left);
+      this.preOrder(callback, curr.right);
+    }
+    // If no callback is passed, tree elements are returned in pre-order
+    else {
+      if (!root) return [];
+      let arr = [];
+      let curr = root;
+      arr.push(curr.value);
+      arr = arr.concat(this.preOrder(null, curr.left));
+      arr = arr.concat(this.preOrder(null, curr.right));
+      return arr;
+    }
+  }
+
+  // Depth-first traversal (Post Order)
+  postOrder(callback, root = this.root){
+    // If a callback is passed, it's called with values one at a time
+    if (callback){
+      if (!root) return;
+      let curr = root; 
+      this.postOrder(callback, curr.left);
+      this.postOrder(callback, curr.right);
+      callback(curr.value);
+    }
+    // If no callback is passed, tree elements are returned in post-order
+    else {
+      if (!root) return [];
+      let arr = [];
+      let curr = root;
+      arr = arr.concat(this.postOrder(null, curr.left));
+      arr = arr.concat(this.postOrder(null, curr.right));
+      arr.push(curr.value);
+      return arr;
+    }
   }
 
   // Prints the tree to the console
