@@ -2,9 +2,17 @@ import Node from "./node.js";
 
 export default class BinarySearchTree {
   constructor(source) {
-    this.root = this.buildTree(source);
+    source = this.constructor.$sortAndRemoveDuplicates(source);
+    this.root = this.$buildTree(source);
   }
-  buildTree(array, root = null) {
+  static $sortAndRemoveDuplicates(array){
+    array = Array.from(new Set(array));
+    array.sort((a,b)=> b - a);
+    return array
+  }
+
+  // Builds a new tree from an array and returns its root
+  $buildTree(array, root = null) {
     if (array.length < 1) return; 
 
     let mid = Math.floor(array.length / 2);
@@ -14,11 +22,12 @@ export default class BinarySearchTree {
 
     let left = array.slice(0, mid);
     let right = array.slice(mid + 1);
-    this.buildTree(left, root)
-    this.buildTree(right, root)
+    this.$buildTree(left, root)
+    this.$buildTree(right, root)
     return root; 
   }
 
+  // Inserts an element to the tree
   insert(val, root = this.root) {
     if (!root) {
       root = new Node(val);
@@ -55,21 +64,22 @@ export default class BinarySearchTree {
   
   }
 
+  // Prints the tree to the console
   print() {
-    this.prettyPrint(this.root);
+    this.$prettyPrint(this.root);
   }
 
-  prettyPrint = (node, prefix = "", isLeft = true) => {
+  $prettyPrint = (node, prefix = "", isLeft = true) => {
     if (!node) {
       return;
     }
     if (node.right !== null) {
-      this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+      this.$prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
     console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
 
     if (node.left !== null) {
-      this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+      this.$prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
 
   };
