@@ -2,10 +2,17 @@ import Node from "./node.js";
 import Queue from "./queue.js";
 
 export default class BinarySearchTree {
+  #root;
+
   constructor(source) {
     source = this.#sortAndRemoveDuplicates(source);
-    this.root = this.#buildTree(source);
+    this.#root = this.#buildTree(source);
   }
+
+  get root(){
+    return this.#root;
+  }
+
   #sortAndRemoveDuplicates(array){
     array = Array.from(new Set(array));
     array.sort((a,b)=> b - a);
@@ -29,7 +36,7 @@ export default class BinarySearchTree {
   }
 
   // Inserts an element to the tree.
-  #insert(val, root = this.root) {
+  #insert(val, root = this.#root) {
     if (!root) {
       root = new Node(val);
       return this;
@@ -63,11 +70,13 @@ export default class BinarySearchTree {
      if (!this.isBalanced()){
       this.rebalance();
     }
+    return this;
   }
 
   // Deletes a value from tree
-  deleteItem(val) {
-    this.#delete(this.root, val);
+  delete(val) {
+    this.#delete(this.#root, val);
+    return this;
   }
 
   #delete(root, val) {
@@ -104,7 +113,7 @@ export default class BinarySearchTree {
 
   // Returns node holding passed value, or null if not found
   find(val) {
-    let curr = this.root;
+    let curr = this.#root;
     let prev;
     while (curr){
       if (val < curr.value) {
@@ -121,7 +130,7 @@ export default class BinarySearchTree {
   }
 
   // Breadth-first traversal
-  levelOrder(callback, root = this.root){
+  levelOrder(callback, root = this.#root){
     
     // If a callback is passed, it's called with values one at a time
     if (callback){
@@ -154,7 +163,7 @@ export default class BinarySearchTree {
   } 
 
   // Depth-first traversal (In Order)
-  inOrder(callback, root = this.root){
+  inOrder(callback, root = this.#root){
     // If a callback is passed, it's called with values one at a time
     if (callback){
       if (!root) return;
@@ -176,7 +185,7 @@ export default class BinarySearchTree {
   }
 
   // Depth-first traversal (Pre Order)
-  preOrder(callback, root = this.root){
+  preOrder(callback, root = this.#root){
     // If a callback is passed, it's called with values one at a time
     if (callback){
       if (!root) return;
@@ -198,7 +207,7 @@ export default class BinarySearchTree {
   }
 
   // Depth-first traversal (Post Order)
-  postOrder(callback, root = this.root){
+  postOrder(callback, root = this.#root){
     // If a callback is passed, it's called with values one at a time
     if (callback){
       if (!root) return;
@@ -228,12 +237,12 @@ export default class BinarySearchTree {
 
   // Returns height of the whole tree
   get height(){
-    return this.#getHeightOf(this.root)
+    return this.#getHeightOf(this.#root)
   }
 
   // Returns depth of a passed node
   #getDepthOf(node){
-    let curr = this.root;
+    let curr = this.#root;
     let count = 0;
     while (curr){
       if (node.value < curr.value) {
@@ -251,22 +260,22 @@ export default class BinarySearchTree {
 
   
   isBalanced(){
-    if (!this.root) return true;
-    const leftHeight = this.#getHeightOf(this.root.left);
-    const rightHeight = this.#getHeightOf(this.root.right);
+    if (!this.#root) return true;
+    const leftHeight = this.#getHeightOf(this.#root.left);
+    const rightHeight = this.#getHeightOf(this.#root.right);
     if (Math.abs(leftHeight - rightHeight) > 1) return false;
     else return true;
   }
 
   rebalance(){
     const currentArray = this.inOrder();
-    this.root = this.#buildTree(currentArray);
+    this.#root = this.#buildTree(currentArray);
     return this;
   }
 
   // Prints the tree to the console
   print() {
-    this.#prettyPrint(this.root);
+    this.#prettyPrint(this.#root);
   }
 
   #prettyPrint = (node, prefix = "", isLeft = true) => {
