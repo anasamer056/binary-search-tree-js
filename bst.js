@@ -1,4 +1,5 @@
 import Node from "./node.js";
+import Queue from "./queue.js";
 
 export default class BinarySearchTree {
   constructor(source) {
@@ -109,18 +110,50 @@ export default class BinarySearchTree {
     return null;    
   }
 
-  levelOrder 
+  // Breadth-first traversal
+  levelOrder(callback, root = this.root){
+    
+    // If a callback is passed, it's called with values one at a time
+    if (callback){
+      if (!root) return;
+      let queue = new Queue();
+      queue.enqueue(root);
+
+      while(queue.data.length){
+        let curr = queue.dequeue();
+        if (curr.left) queue.enqueue(curr.left);
+        if (curr.right) queue.enqueue(curr.right);
+        callback(curr.value);
+      }
+
+      // If no callback is passed, tree elements are returned in level-order
+    } else {
+      if (!root) return [];
+      let result = [];
+      let queue = new Queue();
+      queue.enqueue(root);
+
+      while(queue.data.length){
+        let curr = queue.dequeue();
+        if (curr.left) queue.enqueue(curr.left);
+        if (curr.right) queue.enqueue(curr.right);
+        result.push(curr.value);
+      }
+      return result;
+    }
+  } 
 
   inOrder(callback, root = this.root){
-    if (!root) return [];
 
     if (callback){
+      if (!root) return;
       let curr = root; 
       this.inOrder(callback, curr.left);
       callback(curr.value);
       this.inOrder(callback, curr.right);
     }
     else {
+      if (!root) return [];
       let arr = [];
       let curr = root;
       arr = arr.concat(this.inOrder(null, curr.left));
