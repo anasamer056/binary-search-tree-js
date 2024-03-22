@@ -2,24 +2,21 @@ import Node from "./node.js";
 
 export default class BinarySearchTree {
   constructor(source) {
-    this.root = this.buildTree(source, this.root);
+    this.root = this.buildTree(source);
   }
   buildTree(array, root = null) {
     if (array.length < 1) return; 
 
     let mid = Math.floor(array.length / 2);
     let midVal = array[mid];
-
-    if (!root) root = new Node (midVal)
-    else {
-      this.insert(midVal, root);
-    }
+    if (!root) root = new Node(midVal);
+    else this.insert(midVal,root);
 
     let left = array.slice(0, mid);
     let right = array.slice(mid + 1);
-    root = this.buildTree(left, root)
-    root = this.buildTree(right, root)
-    return root;
+    this.buildTree(left, root)
+    this.buildTree(right, root)
+    return root; 
   }
 
   insert(val, root = this.root) {
@@ -48,6 +45,16 @@ export default class BinarySearchTree {
     }
   }
 
+  inOrder(callback, root = this.root){
+    if (!root) return;
+    
+    let curr = root; 
+    this.inOrder(callback, curr.left);
+    callback(curr.value);
+    this.inOrder(callback, curr.right);
+  
+  }
+
   print() {
     this.prettyPrint(this.root);
   }
@@ -56,15 +63,14 @@ export default class BinarySearchTree {
     if (!node) {
       return;
     }
-    console.log("called")
-
     if (node.right !== null) {
-      prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+      this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
 
     if (node.left !== null) {
-      prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+      this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
+
   };
 }
