@@ -1,6 +1,6 @@
 # Binary Search Tree (BST)
 
-This is a JavaScript implementation of a Binary Search Tree (BST) class, which provides various methods for manipulating and traversing binary search trees. 
+This is a JavaScript implementation of a Binary Search Tree (BST), which provides various methods for manipulating and traversing binary search trees. 
 
 Please note: this implementation doesn't allow duplicates.
 
@@ -11,8 +11,6 @@ Please note: this implementation doesn't allow duplicates.
 #### `constructor(source: Array)`
 
 - Creates a new BST instance with elements from passed array after removing duplicates.
-- Parameters:
-  - `source`: An array of elements to initialize the BST.
 
 ### Getters
 
