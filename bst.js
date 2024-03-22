@@ -54,14 +54,81 @@ export default class BinarySearchTree {
     }
   }
 
+  // Deletes a value from tree
+  deleteItem(val) {
+    this.$delete(this.root, val);
+  }
+
+  $delete(root, val) {
+    if (!root) return null;
+    else if (val > root.value) root.right = this.$delete(root.right, val);
+    else if (val < root.value) root.left = this.$delete(root.left, val);
+    else {
+      // Case 1: Target node has no children
+      if (!root.right && !root.left) {
+        return null;
+      }
+      // Case 2: Target node has one child 
+      if (!root.right) return root.left;
+      else if (!root.left) return root.right;
+      // Case 3: Target node has 2 children
+      else {
+        let min = this.getMin(root.right);
+        root.value = min.value;
+        root.right = this.$delete(root.right, min.value)
+        return root;
+      }
+    }
+    return root;
+  }
+
+  getMin(root){
+    let prev;
+    while (root){
+      prev = root;
+      root = root.left
+    }
+    return prev;
+  }
+
+  // Returns node holding passed value, or null if not found
+  getNode(val) {
+    let curr = this.root;
+    let prev;
+    while (curr){
+      if (val < curr.value) {
+        prev = curr;
+        curr = curr.left;
+      }
+      else if (val > curr.value) {
+        prev = curr;
+        curr = curr.right;
+      }
+      else return {curr, prev};
+    }
+    return null;    
+  }
+
+  levelOrder 
+
   inOrder(callback, root = this.root){
-    if (!root) return;
-    
-    let curr = root; 
-    this.inOrder(callback, curr.left);
-    callback(curr.value);
-    this.inOrder(callback, curr.right);
-  
+    if (!root) return [];
+
+    if (callback){
+      let curr = root; 
+      this.inOrder(callback, curr.left);
+      callback(curr.value);
+      this.inOrder(callback, curr.right);
+    }
+    else {
+      let arr = [];
+      let curr = root;
+      arr = arr.concat(this.inOrder(null, curr.left));
+      arr.push(curr.value);
+      arr = arr.concat(this.inOrder(null, curr.right));
+      return arr;
+    }
+
   }
 
   // Prints the tree to the console
