@@ -2,7 +2,7 @@
 
 This is a JavaScript implementation of a Binary Search Tree (BST), which provides various methods for manipulating and traversing binary search trees. 
 
-Please note: this implementation doesn't allow duplicates.
+**Please note: this implementation doesn't allow duplicates.**
 
 ## Public Methods
 
