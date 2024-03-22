@@ -208,12 +208,43 @@ export default class BinarySearchTree {
       return arr;
     }
   }
-  
+
   // Returns height of passed node
   getHeightOf(node){
     if (!node) return -1;
     
     return Math.max(this.getHeightOf(node.right), this.getHeightOf(node.left)) + 1;
+  }
+
+  // Returns height of the whole tree
+  get height(){
+    return this.getHeightOf(this.root)
+  }
+
+  // Returns depth of a passed node
+  getDepthOf(node){
+    let curr = this.root;
+    let count = 0;
+    while (curr){
+      if (node.value < curr.value) {
+        curr = curr.left;
+        count++;
+      }
+      else if (node.value > curr.value) {
+        curr = curr.right;
+        count++;
+      }
+      else return count;
+    }
+    return null;    
+  }
+
+
+  isBalanced(){
+    const leftHeight = this.getHeightOf(this.root.left);
+    const rightHeight = this.getHeightOf(this.root.right);
+    if (Math.abs(leftHeight - rightHeight) > 1) return false;
+    else return true;
   }
 
   // Prints the tree to the console
