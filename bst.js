@@ -3,33 +3,33 @@ import Queue from "./queue.js";
 
 export default class BinarySearchTree {
   constructor(source) {
-    source = this.constructor.$sortAndRemoveDuplicates(source);
-    this.root = this.$buildTree(source);
+    source = this.#sortAndRemoveDuplicates(source);
+    this.root = this.#buildTree(source);
   }
-  static $sortAndRemoveDuplicates(array){
+  #sortAndRemoveDuplicates(array){
     array = Array.from(new Set(array));
     array.sort((a,b)=> b - a);
     return array
   }
 
   // Builds a new tree from an array and returns its root
-  $buildTree(array, root = null) {
+  #buildTree(array, root = null) {
     if (array.length < 1) return; 
 
     let mid = Math.floor(array.length / 2);
     let midVal = array[mid];
     if (!root) root = new Node(midVal);
-    else this.insert(midVal,root);
+    else this.#insert(midVal,root);
 
     let left = array.slice(0, mid);
     let right = array.slice(mid + 1);
-    this.$buildTree(left, root)
-    this.$buildTree(right, root)
+    this.#buildTree(left, root)
+    this.#buildTree(right, root)
     return root; 
   }
 
-  // Inserts an element to the tree
-  insert(val, root = this.root) {
+  // Inserts an element to the tree.
+  #insert(val, root = this.root) {
     if (!root) {
       root = new Node(val);
       return this;
@@ -53,17 +53,27 @@ export default class BinarySearchTree {
     } else {
       parent.left = new Node(val);
     }
+
+    
+  }
+
+  add(val){
+    this.#insert(val);
+     // Balance the tree if it's now unbalanced
+     if (!this.isBalanced()){
+      this.rebalance();
+    }
   }
 
   // Deletes a value from tree
   deleteItem(val) {
-    this.$delete(this.root, val);
+    this.#delete(this.root, val);
   }
 
-  $delete(root, val) {
+  #delete(root, val) {
     if (!root) return null;
-    else if (val > root.value) root.right = this.$delete(root.right, val);
-    else if (val < root.value) root.left = this.$delete(root.left, val);
+    else if (val > root.value) root.right = this.#delete(root.right, val);
+    else if (val < root.value) root.left = this.#delete(root.left, val);
     else {
       // Case 1: Target node has no children
       if (!root.right && !root.left) {
@@ -74,16 +84,16 @@ export default class BinarySearchTree {
       else if (!root.left) return root.right;
       // Case 3: Target node has 2 children
       else {
-        let min = this.getMin(root.right);
+        let min = this.#getMin(root.right);
         root.value = min.value;
-        root.right = this.$delete(root.right, min.value)
+        root.right = this.#delete(root.right, min.value)
         return root;
       }
     }
     return root;
   }
 
-  getMin(root){
+  #getMin(root){
     let prev;
     while (root){
       prev = root;
@@ -93,7 +103,7 @@ export default class BinarySearchTree {
   }
 
   // Returns node holding passed value, or null if not found
-  getNode(val) {
+  find(val) {
     let curr = this.root;
     let prev;
     while (curr){
@@ -210,19 +220,19 @@ export default class BinarySearchTree {
   }
 
   // Returns height of passed node
-  getHeightOf(node){
+  #getHeightOf(node){
     if (!node) return -1;
     
-    return Math.max(this.getHeightOf(node.right), this.getHeightOf(node.left)) + 1;
+    return Math.max(this.#getHeightOf(node.right), this.#getHeightOf(node.left)) + 1;
   }
 
   // Returns height of the whole tree
   get height(){
-    return this.getHeightOf(this.root)
+    return this.#getHeightOf(this.root)
   }
 
   // Returns depth of a passed node
-  getDepthOf(node){
+  #getDepthOf(node){
     let curr = this.root;
     let count = 0;
     while (curr){
@@ -241,34 +251,35 @@ export default class BinarySearchTree {
 
   
   isBalanced(){
-    const leftHeight = this.getHeightOf(this.root.left);
-    const rightHeight = this.getHeightOf(this.root.right);
+    if (!this.root) return true;
+    const leftHeight = this.#getHeightOf(this.root.left);
+    const rightHeight = this.#getHeightOf(this.root.right);
     if (Math.abs(leftHeight - rightHeight) > 1) return false;
     else return true;
   }
 
   rebalance(){
     const currentArray = this.inOrder();
-    this.root = this.$buildTree(currentArray);
+    this.root = this.#buildTree(currentArray);
     return this;
   }
 
   // Prints the tree to the console
   print() {
-    this.$prettyPrint(this.root);
+    this.#prettyPrint(this.root);
   }
 
-  $prettyPrint = (node, prefix = "", isLeft = true) => {
+  #prettyPrint = (node, prefix = "", isLeft = true) => {
     if (!node) {
       return;
     }
     if (node.right !== null) {
-      this.$prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+      this.#prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
     console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
 
     if (node.left !== null) {
-      this.$prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+      this.#prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
 
   };
