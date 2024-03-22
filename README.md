@@ -4,7 +4,7 @@ This is a JavaScript implementation of a Binary Search Tree (BST), which provide
 
 **Please note: this implementation doesn't allow duplicates.**
 
-## Public Methods
+## Public API
 
 ### Constructor
 
